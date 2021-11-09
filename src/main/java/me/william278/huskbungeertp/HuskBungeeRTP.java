@@ -4,13 +4,14 @@ import me.william278.huskbungeertp.command.HuskBungeeRtpCommand;
 import me.william278.huskbungeertp.command.RtpCommand;
 import me.william278.huskbungeertp.config.Group;
 import me.william278.huskbungeertp.config.Settings;
-import me.william278.huskbungeertp.plan.PlanHook;
-import me.william278.huskbungeertp.plan.PlanQueryAccessor;
 import me.william278.huskbungeertp.jedis.RedisMessenger;
 import me.william278.huskbungeertp.mysql.DataHandler;
+import me.william278.huskbungeertp.plan.PlanHook;
+import me.william278.huskbungeertp.plan.PlanQueryAccessor;
 import me.william278.huskbungeertp.randomtp.processor.AbstractRtp;
 import me.william278.huskbungeertp.randomtp.processor.DefaultRtp;
 import me.william278.huskbungeertp.randomtp.processor.JakesRtp;
+import me.william278.huskbungeertp.randomtp.processor.LeafRtp;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -100,8 +101,10 @@ public final class HuskBungeeRTP extends JavaPlugin {
     }
 
     private void setAbstractRtp() {
-        if (Bukkit.getPluginManager().getPlugin("JakesRTP") != null) {
+        if (Bukkit.getPluginManager().isPluginEnabled("JakesRTP")) {
             abstractRtp = new JakesRtp();
+        } else if(Bukkit.getPluginManager().isPluginEnabled("RTP")){
+            abstractRtp = new LeafRtp();
         } else {
             abstractRtp = new DefaultRtp();
         }
